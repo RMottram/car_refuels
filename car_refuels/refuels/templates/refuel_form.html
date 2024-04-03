@@ -15,7 +15,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for refuel in refuels%}
+                {% for refuel in refuels|dictsortreversed:"date" %}
                     <tr>
                         <td>{{ refuel.date|date:'d M Y' }}</td>
                         <td>{{ refuel.fuel_type }}</td>
@@ -24,12 +24,30 @@
                         <td>£{{ refuel.total_cost }}</td>
                         <td>
                             <button class="btn btn-primary btn-sm edit-refuel" data-refuel-id="{{ refuel.id }}">Edit</button>
-                            <button class="btn btn-danger btn-sm delete-refuel" data-refuel-id="{{ refuel.id }}">Delete</button>
+                            <button class="btn btn-danger btn-sm delete-refuel" data-refuel-id="{{ refuel.id }}" data-csrf-token="{{ csrf_token }}">Delete</button>
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+    <!-- Pagination -->
+    <div class="pagination">
+        <p class="step-links">
+            {% if refuels.has_previous %}
+                <a href="?page=1">&laquo; First</a>
+                <a href="?page={{ refuels.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            <p class="current">
+                &ensp; Page {{ refuels.number }} of {{ refuels.paginator.num_pages }} &ensp;
+            </p>
+
+            {% if refuels.has_next %}
+                <a href="?page={{ refuels.next_page_number }}">Next</a> &ensp;
+                <a href="?page={{ refuels.paginator.num_pages }}">Last &raquo;</a>
+            {% endif %}
+        </p>
     </div>
     <div class="container mt-5">
         <h3 class="mb-4">Add Refuel</h3>
@@ -60,46 +78,22 @@
                         <br>
                     </div>
                     <div class="form-group">
-                        <label for="litres_filled"><span>*</span>Litres Filled:</label>
+                        <label for="litres_filled"><span>*</span>Litres Filled: <span class="field-hint">(xx.xx)</span></label>
                         <input type="number" class="form-control" id="litres_filled" name="litres_filled" step="0.01">
                         <br>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="pence_per_litre"><span>*</span>Pence per Litre:</label>
+                        <label for="pence_per_litre"><span>*</span>Pence per Litre: <span class="field-hint">(xxx.x)</span></label>
                         <input type="number" class="form-control" id="pence_per_litre" name="pence_per_litre" step="0.01">
                         <br>
                     </div>
-                    <!-- <div class="form-group">
-                        <label for="total_cost"><span>*</span>Total Cost:</label>
-                        <input type="number" class="form-control" id="total_cost" name="total_cost" step="0.01">
-                        <br>
-                    </div> -->
                 </div>
             </div>
-            
             <button type="submit" class="btn btn-success">Submit</button>
         </form>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.delete-refuel').click(function() {
-                var refuelId = $(this).data('refuel-id');
-                if (confirm('Are you sure you want to delete this refuel session?')) {
-                    $.ajax({
-                        url: window.location.pathname + refuelId + '/',  // Include refuel ID in URL
-                        type: 'DELETE',
-                        headers: {
-                            'X-CSRFToken': '{{ csrf_token }}'
-                        },
-                        success: function(result) {
-                            window.location.reload();
-                        }
-                    });
-                }
-            });
-        });
-    </script>
+    <script src="/static/script.js"></script>
 {% endblock %}
