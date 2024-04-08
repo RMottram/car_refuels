@@ -40,7 +40,7 @@ def refuels(request):
 
     return render(request, 'refuel_form.html', {'form': form, 'refuels': refuels})
 
-@require_http_methods(['DELETE'])  # Ensure only DELETE requests are allowed
+@require_http_methods(['DELETE'])
 def delete_refuel(request, refuel_id):
     refuel = get_object_or_404(RefuelSession, pk=refuel_id)
     refuel.delete()

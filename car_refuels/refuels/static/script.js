@@ -4,7 +4,7 @@ $(document).ready(function() {
         var csrfToken = $(this).data('csrf-token');
         if (confirm('Are you sure you want to delete this refuel session?')) {
             $.ajax({
-                url: window.location.pathname + refuelId + '/',  // Include refuel ID in URL
+                url: window.location.pathname + refuelId + '/',
                 type: 'DELETE',
                 headers: {
                     'X-CSRFToken': csrfToken
@@ -15,4 +15,5 @@ $(document).ready(function() {
             });
         }
     });
+
 });

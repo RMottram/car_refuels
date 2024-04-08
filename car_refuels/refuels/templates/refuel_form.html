@@ -23,7 +23,6 @@
                         <td>{{ refuel.litres_filled }}L</td>
                         <td>£{{ refuel.total_cost }}</td>
                         <td>
-                            <button class="btn btn-primary btn-sm edit-refuel" data-refuel-id="{{ refuel.id }}">Edit</button>
                             <button class="btn btn-danger btn-sm delete-refuel" data-refuel-id="{{ refuel.id }}" data-csrf-token="{{ csrf_token }}">Delete</button>
                         </td>
                     </tr>
